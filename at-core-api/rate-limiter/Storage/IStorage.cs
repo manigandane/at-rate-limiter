@@ -7,7 +7,7 @@ namespace rate_limiter.Storage
     public interface IStorage
     {
         public bool StoreRequest(RlRequest request);
-        public IEnumerable<RlRequest> GetAllRequests();
+        public List<RlRequest> GetAllRequests();
         public bool DeleteRequest(RlRequest request);
     }
 }

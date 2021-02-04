@@ -6,7 +6,7 @@ namespace rate_limiter.Strategies
 {
     public abstract class StrategyBase
     {
-        private readonly IStorage storage;
+        protected readonly IStorage storage;
         public StrategyBase(IStorage storage)
         {
             this.storage = storage;

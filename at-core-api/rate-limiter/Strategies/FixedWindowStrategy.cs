@@ -10,14 +10,37 @@ namespace rate_limiter.Strategies
      */
     public class FixedWindowStrategy : StrategyBase
     {
-        public FixedWindowStrategy(IStorage storage): base(storage)
+        private int _maximumRequests;
+        private int _windowMinutes;
+        public FixedWindowStrategy(IStorage storage, int maximumRequests, int windowMinutes): base(storage)
         {
-
+            this._maximumRequests = maximumRequests;
+            this._windowMinutes = windowMinutes;
         }
 
         public override RlResponse ValidateRequest(RlRequest request)
         {
-            throw new NotImplementedException();
+            var result = new RlResponse();
+            //base.storage
+            //check if new request is allowed
+            var allReqs = base.storage.GetAllRequests();
+            var currentReqs = allReqs.FindAll(item => item.Time > DateTime.UtcNow.AddMinutes(-1 * _windowMinutes));
+            if (currentReqs.Count < _maximumRequests)
+            {
+                //allowed
+                //if so, add to current list
+                base.storage.StoreRequest(request);
+                result.Allowed = true;
+            }
+            else
+            {
+                //reject
+                result.Allowed = false;
+                result.Message = "Too many requests, please try after sometime";
+            }
+
+            //send RlResponse
+            return result;
         }
     }
 }
