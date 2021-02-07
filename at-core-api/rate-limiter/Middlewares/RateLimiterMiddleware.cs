@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using rate_limiter.Factory;
+using rate_limiter.Storage;
 using rate_limiter.Strategies;
 
 namespace rate_limiter.Middlewares
@@ -23,7 +24,7 @@ namespace rate_limiter.Middlewares
         {
             _next = next;
             _logger = logFactory.CreateLogger("RateLimiter");
-            rateLimiter = RateLimiterFactory.GetFixedWindowRateLimiterStrategy(MAXIMUM_REQUESTS, WINDOW_MINUTES);
+            rateLimiter = RateLimiterFactory.GetFixedWindowRateLimiterStrategy(new MemoryStorage(), MAXIMUM_REQUESTS, WINDOW_MINUTES);
         }
 
         public async Task InvokeAsync(HttpContext httpContext)

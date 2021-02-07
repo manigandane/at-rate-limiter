@@ -6,9 +6,9 @@ namespace rate_limiter.Factory
 {
     public class RateLimiterFactory
     {
-        public static StrategyBase GetFixedWindowRateLimiterStrategy(int maximumRequests, int windowMinutes)
+        public static StrategyBase GetFixedWindowRateLimiterStrategy(IStorage storage, int maximumRequests, int windowMinutes)
         {
-            return new FixedWindowStrategy(new MemoryStorage(), maximumRequests, windowMinutes);
+            return new FixedWindowStrategy(storage, maximumRequests, windowMinutes);
         }
     }
 }
